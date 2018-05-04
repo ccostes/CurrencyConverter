@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { ScrollView, StatusBar, Platform } from 'react-native';
+import PropTypes from 'prop-types';
+import { ScrollView, StatusBar, Platform, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { connectAlert } from '../components/Alert';
 
 import { ListItem, Separator } from '../components/List';
 
@@ -9,14 +11,21 @@ const ICON_COLOR = '#868686';
 const ICON_SIZE = 23;
 
 class Options extends Component {
+  static propTypes = {
+    navigation: PropTypes.object,
+    alertWithType: PropTypes.func,
+  };
+
   handleThemesPress = () => {
+    this.props.navigation.navigate('Themes');
     console.log('press themes');
   }
   handleSitePress = () => {
     console.log('press site');
+    Linking.openURL('http://fixer.io').catch(() => this.props.alertWithType('error', 'Sorry!', 'URL Error!'));
   }
 
-  render () {
+  render(){
     return (
       <ScrollView>
         <StatusBar translucent={false} barStyle="default" />
@@ -41,4 +50,4 @@ class Options extends Component {
   }
 }
 
-export default Options;
+export default connectAlert(Options);
